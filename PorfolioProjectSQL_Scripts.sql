@@ -1,35 +1,35 @@
 
 
 --Cleaning data so it's possible to convert from VARCHAR to INT
-UPDATE covid_vaccines SET new_vaccinations=NULL WHERE covid_vaccines.new_vaccinations=''
-UPDATE covid_vaccines SET total_tests=NULL WHERE covid_vaccines.total_tests=''
-UPDATE covid_vaccines SET new_tests=NULL WHERE covid_vaccines.new_tests=''
-UPDATE covid_vaccines SET total_tests_per_thousand=NULL WHERE covid_vaccines.total_tests_per_thousand=''
-UPDATE covid_vaccines SET new_tests_per_thousand=NULL WHERE covid_vaccines.new_tests_per_thousand=''
-UPDATE covid_vaccines SET new_tests_smoothed=NULL WHERE covid_vaccines.new_tests_smoothed=''
-UPDATE covid_vaccines SET new_tests_smoothed_per_thousand=NULL WHERE covid_vaccines.new_tests_smoothed_per_thousand=''
-UPDATE covid_vaccines SET positive_rate=NULL WHERE covid_vaccines.positive_rate=''
-UPDATE covid_vaccines SET tests_per_case=NULL WHERE covid_vaccines.tests_per_case=''
-UPDATE covid_vaccines SET tests_units=NULL WHERE covid_vaccines.tests_units=''
-UPDATE covid_vaccines SET total_vaccinations=NULL WHERE covid_vaccines.total_vaccinations=''
-UPDATE covid_vaccines SET people_vaccinated=NULL WHERE covid_vaccines.people_vaccinated=''
-UPDATE covid_vaccines SET people_fully_vaccinated=NULL WHERE covid_vaccines.people_fully_vaccinated=''
-UPDATE covid_vaccines SET total_boosters=NULL WHERE covid_vaccines.total_boosters=''
-UPDATE covid_vaccines SET new_vaccinations_smoothed=NULL WHERE covid_vaccines.new_vaccinations_smoothed=''
-UPDATE covid_vaccines SET total_vaccinations_per_hundred=NULL WHERE covid_vaccines.total_vaccinations_per_hundred=''
-UPDATE covid_vaccines SET people_vaccinated_per_hundred=NULL WHERE covid_vaccines.people_vaccinated_per_hundred=''
-UPDATE covid_vaccines SET people_fully_vaccinated_per_hundred=NULL WHERE covid_vaccines.people_fully_vaccinated_per_hundred=''
-UPDATE covid_vaccines SET total_boosters_per_hundred=NULL WHERE covid_vaccines.total_boosters_per_hundred=''
-UPDATE covid_vaccines SET new_vaccinations_smoothed_per_million=NULL WHERE covid_vaccines.new_vaccinations_smoothed_per_million=''
-UPDATE covid_vaccines SET new_people_vaccinated_smoothed=NULL WHERE covid_vaccines.new_people_vaccinated_smoothed=''
-UPDATE covid_vaccines SET new_people_vaccinated_smoothed_per_hundred=NULL WHERE covid_vaccines.new_people_vaccinated_smoothed_per_hundred=''
-UPDATE covid_vaccines SET extreme_poverty=NULL WHERE covid_vaccines.extreme_poverty=''
-UPDATE covid_vaccines SET female_smokers=NULL WHERE covid_vaccines.female_smokers=''
-UPDATE covid_vaccines SET male_smokers=NULL WHERE covid_vaccines.male_smokers=''
-UPDATE covid_vaccines SET excess_mortality_cumulative_absolute=NULL WHERE covid_vaccines.excess_mortality_cumulative_absolute=''
-UPDATE covid_vaccines SET excess_mortality_cumulative=NULL WHERE covid_vaccines.excess_mortality_cumulative=''
-UPDATE covid_vaccines SET excess_mortality=NULL WHERE covid_vaccines.excess_mortality=''
-UPDATE covid_vaccines SET excess_mortality_cumulative_per_million=NULL WHERE covid_vaccines.excess_mortality_cumulative_per_million=''
+UPDATE covid_vaccines SET new_vaccinations=NULL WHERE covid_vaccines.new_vaccinations='';
+UPDATE covid_vaccines SET total_tests=NULL WHERE covid_vaccines.total_tests='';
+UPDATE covid_vaccines SET new_tests=NULL WHERE covid_vaccines.new_tests='';
+UPDATE covid_vaccines SET total_tests_per_thousand=NULL WHERE covid_vaccines.total_tests_per_thousand='';
+UPDATE covid_vaccines SET new_tests_per_thousand=NULL WHERE covid_vaccines.new_tests_per_thousand='';
+UPDATE covid_vaccines SET new_tests_smoothed=NULL WHERE covid_vaccines.new_tests_smoothed='';
+UPDATE covid_vaccines SET new_tests_smoothed_per_thousand=NULL WHERE covid_vaccines.new_tests_smoothed_per_thousand='';
+UPDATE covid_vaccines SET positive_rate=NULL WHERE covid_vaccines.positive_rate='';
+UPDATE covid_vaccines SET tests_per_case=NULL WHERE covid_vaccines.tests_per_case='';
+UPDATE covid_vaccines SET tests_units=NULL WHERE covid_vaccines.tests_units='';
+UPDATE covid_vaccines SET total_vaccinations=NULL WHERE covid_vaccines.total_vaccinations='';
+UPDATE covid_vaccines SET people_vaccinated=NULL WHERE covid_vaccines.people_vaccinated='';
+UPDATE covid_vaccines SET people_fully_vaccinated=NULL WHERE covid_vaccines.people_fully_vaccinated='';
+UPDATE covid_vaccines SET total_boosters=NULL WHERE covid_vaccines.total_boosters='';
+UPDATE covid_vaccines SET new_vaccinations_smoothed=NULL WHERE covid_vaccines.new_vaccinations_smoothed='';
+UPDATE covid_vaccines SET total_vaccinations_per_hundred=NULL WHERE covid_vaccines.total_vaccinations_per_hundred='';
+UPDATE covid_vaccines SET people_vaccinated_per_hundred=NULL WHERE covid_vaccines.people_vaccinated_per_hundred='';
+UPDATE covid_vaccines SET people_fully_vaccinated_per_hundred=NULL WHERE covid_vaccines.people_fully_vaccinated_per_hundred='';
+UPDATE covid_vaccines SET total_boosters_per_hundred=NULL WHERE covid_vaccines.total_boosters_per_hundred='';
+UPDATE covid_vaccines SET new_vaccinations_smoothed_per_million=NULL WHERE covid_vaccines.new_vaccinations_smoothed_per_million='';
+UPDATE covid_vaccines SET new_people_vaccinated_smoothed=NULL WHERE covid_vaccines.new_people_vaccinated_smoothed='';
+UPDATE covid_vaccines SET new_people_vaccinated_smoothed_per_hundred=NULL WHERE covid_vaccines.new_people_vaccinated_smoothed_per_hundred='';
+UPDATE covid_vaccines SET extreme_poverty=NULL WHERE covid_vaccines.extreme_poverty='';
+UPDATE covid_vaccines SET female_smokers=NULL WHERE covid_vaccines.female_smokers='';
+UPDATE covid_vaccines SET male_smokers=NULL WHERE covid_vaccines.male_smokers='';
+UPDATE covid_vaccines SET excess_mortality_cumulative_absolute=NULL WHERE covid_vaccines.excess_mortality_cumulative_absolute='';
+UPDATE covid_vaccines SET excess_mortality_cumulative=NULL WHERE covid_vaccines.excess_mortality_cumulative='';
+UPDATE covid_vaccines SET excess_mortality=NULL WHERE covid_vaccines.excess_mortality='';
+UPDATE covid_vaccines SET excess_mortality_cumulative_per_million=NULL WHERE covid_vaccines.excess_mortality_cumulative_per_million='';
 
 
 --Converting data from VARCHAR to appropriate datatype (bigint,float4)
@@ -176,17 +176,17 @@ JOIN covid_vaccines AS vac
 	ON dea.location = vac.location
 	AND dea.date = vac.date
 WHERE dea.continent <> ''
-AND dea.location = 'Canada'
+AND dea.location = 'Canada';
 )
 SELECT*, (rolling_vaccinations/population)*100
-FROM popvsvac
+FROM popvsvac;
 
 
 
 --TEMP TABLE
 
-DROP TABLE IF EXISTS percent_population_vaccinated
-CREATE TABLE percent_population_vaccinated
+DROP TABLE IF EXISTS #percent_population_vaccinated
+CREATE TABLE #percent_population_vaccinated
 (
 continent varchar(255),
 location varchar(255),
@@ -194,7 +194,7 @@ date date,
 population NUMERIC,
 new_vaccinations NUMERIC,
 rolling_people_vaccinated NUMERIC
-)
+);
 
 
 INSERT INTO percent_population_vaccinated
@@ -205,10 +205,10 @@ FROM covid_deaths AS dea
 JOIN covid_vaccines AS vac	
 	ON dea.location = vac.location
 	AND dea.date = vac.date
-WHERE dea.continent <> ''
+WHERE dea.continent <> '';
 
 SELECT*, (rolling_people_vaccinated/population)*100
-FROM percent_population_vaccinated
+FROM percent_population_vaccinated;
 
 
 
@@ -227,4 +227,4 @@ WHERE dea.continent <> '';
 
 
 SELECT *
-FROM percent_population_vaccinated
+FROM percent_population_vaccinated;
