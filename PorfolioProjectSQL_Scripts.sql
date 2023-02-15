@@ -80,32 +80,32 @@ ORDER BY 3,4;
 --ORDER BY 3,4;
 
 -- Select Data that we are going to be using
-SELECT LOCATION, date, total_cases, new_cases, total_deaths, population
+SELECT location, date, total_cases, new_cases, total_deaths, population
 FROM covid_deaths
 ORDER BY 1,2;
 
 
 -- Looking at Total Cases vs Total Deaths
 -- Shows what percentage died of covid when contracting the disease
-SELECT LOCATION, date, total_cases, total_deaths, (total_deaths/total_cases::NUMERIC)*100 AS death_percentage
+SELECT location, date, total_cases, total_deaths, (total_deaths/total_cases::NUMERIC)*100 AS death_percentage
 FROM covid_deaths
---WHERE LOCATION LIKE '%States'
+--WHERE location LIKE '%States'
 ORDER BY 1,2;
 
 
 --Looking at countries with highest infection rates compared to population
-SELECT LOCATION, population, MAX(total_cases) AS highest_infection_count, MAX((total_cases/population::NUMERIC)*100) AS percent_of_population_infected
+SELECT location, population, MAX(total_cases) AS highest_infection_count, MAX((total_cases/population::NUMERIC)*100) AS percent_of_population_infected
 FROM covid_deaths
-GROUP BY LOCATION, population
+GROUP BY location, population
 ORDER BY percent_of_population_infected DESC;
 
 
 --Showing Countries with the highest death count per population
-SELECT LOCATION, MAX(total_deaths) AS total_death_count
+SELECT location, MAX(total_deaths) AS total_death_count
 FROM covid_deaths
 WHERE continent <> ''
 AND total_deaths IS NOT NULL
-GROUP BY LOCATION
+GROUP BY location
 ORDER BY total_death_count DESC;
 
 
@@ -136,25 +136,25 @@ SELECT location, MAX(total_deaths) AS total_death_count
 FROM covid_deaths
 WHERE total_deaths IS NOT NULL
 AND continent = ''
-AND LOCATION NOT LIKE '%income'
+AND location NOT LIKE '%income'
 GROUP BY location
 ORDER BY total_death_count DESC;
 
 --GLOBAL NUMBERS (World)
-SELECT LOCATION, population, total_cases,new_cases, total_deaths, new_deaths
+SELECT location, population, total_cases,new_cases, total_deaths, new_deaths
 FROM covid_deaths
-WHERE LOCATION = 'World';
+WHERE location = 'World';
 
 
 
 --Looking at Total Population vs Vaccinations
-SELECT dea.continent, dea.LOCATION, dea.date, dea.population, vac.new_vaccinations
-,SUM(new_vaccinations) OVER (PARTITION BY dea.LOCATION ORDER BY dea.LOCATION,
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations
+,SUM(new_vaccinations) OVER (PARTITION BY dea.location ORDER BY dea.location,
 dea.date) AS rolling_vaccinations
 , (rolling_vaccinations/population)*100
 FROM covid_deaths AS dea	
 JOIN covid_vaccines AS vac	
-	ON dea.LOCATION = vac.LOCATION
+	ON dea.location = vac.location
 	AND dea.date = vac.date
 WHERE dea.continent <> ''
 ORDER BY 2,3;
@@ -165,18 +165,18 @@ ORDER BY 2,3;
 
 --USE CTE
 
-WITH popvsvac (continent, LOCATION, date, population, new_vaccinations, rolling_vaccinations)
+WITH popvsvac (continent, location, date, population, new_vaccinations, rolling_vaccinations)
 AS
 (
-SELECT dea.continent, dea.LOCATION, dea.date, dea.population, vac.new_vaccinations
-,SUM(new_vaccinations) OVER (PARTITION BY dea.LOCATION ORDER BY dea.LOCATION,
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations
+,SUM(new_vaccinations) OVER (PARTITION BY dea.location ORDER BY dea.location,
 dea.date) AS rolling_vaccinations
 FROM covid_deaths AS dea	
 JOIN covid_vaccines AS vac	
-	ON dea.LOCATION = vac.LOCATION
+	ON dea.location = vac.location
 	AND dea.date = vac.date
 WHERE dea.continent <> ''
-AND dea.LOCATION = 'Canada'
+AND dea.location = 'Canada'
 )
 SELECT*, (rolling_vaccinations/population)*100
 FROM popvsvac
@@ -198,12 +198,12 @@ rolling_people_vaccinated NUMERIC
 
 
 INSERT INTO percent_population_vaccinated
-SELECT dea.continent, dea.LOCATION, dea.date, dea.population, vac.new_vaccinations
-,SUM(new_vaccinations) OVER (PARTITION BY dea.LOCATION ORDER BY dea.LOCATION,
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations
+,SUM(new_vaccinations) OVER (PARTITION BY dea.location ORDER BY dea.location,
 dea.date) AS rolling_people_vaccinated
 FROM covid_deaths AS dea	
 JOIN covid_vaccines AS vac	
-	ON dea.LOCATION = vac.LOCATION
+	ON dea.location = vac.location
 	AND dea.date = vac.date
 WHERE dea.continent <> ''
 
